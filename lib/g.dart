@@ -90,8 +90,8 @@ class _MyAppState extends State<MyAppE> {
           v=listInstalledApp[i]["version_name"];
           versionAppInstalled= listInstalledApp[i]["version_name"].replaceAll('.', '');
           if(nameAppInstalled == nameAppFile){
-            main2();
             if(int.parse(versionAppInstalled) < int.parse(versionAppFileWithoutDot)){
+              main2();
               installedAppsInFile.add({"app_name": nameAppFile, "package_name": "com.android.chrome", "url": url, "versionCode": null, "version_name": v, "check": "green"});
             }else{
               installedAppsInFile.add({"app_name": nameAppFile, "package_name": "com.android.chrome", "url": url, "versionCode": null, "version_name": v, "check": "red"});
@@ -149,6 +149,17 @@ class _MyAppState extends State<MyAppE> {
     return buttonDisabled1;
   }
 
+
+  getPermissionString(index) {
+    String monWidget;
+    if (index == "green") {
+      monWidget = " (mise à jour disponible)";
+    }else if (index == "red"){
+      monWidget = "A jour";
+    }
+    return monWidget;
+  }
+
   launchURL(String url) async {
     if (await canLaunch(url)){
       await launch(url);
@@ -169,7 +180,13 @@ class _MyAppState extends State<MyAppE> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(installedAppsInFile[index]["app_name"]),
-            subtitle: Text(installedAppsInFile[index]["version_name"]),
+            subtitle: RichText(
+              text: new TextSpan(style: new TextStyle(color: Colors.black,),
+                children: <TextSpan>[
+                  new TextSpan(text: installedAppsInFile[index]["version_name"]),
+                  new TextSpan(text: getPermissionString(installedAppsInFile[index]["check"]), style: new TextStyle(color: Colors.red)),
+                ],
+              ),),
             trailing: IconButton(
                 icon: getIcon(installedAppsInFile[index]["check"]),
                 onPressed: () {

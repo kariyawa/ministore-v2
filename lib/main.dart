@@ -1,94 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:ministore/test.dart';
+import 'package:ministore/accueil.dart';
 
-import 'g.dart';
-import 'gpas.dart';
+import 'accueil.dart'; // mettre la page main de second-test
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: 'Navigation Basics',
-    home: MyApp(),
-  ));
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => new _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 2, vsync: this);
-
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
-
-  Widget getTabBar() {
-    return TabBar(
-        controller: tabController,
-        indicatorSize: TabBarIndicatorSize.label,
-        tabs: [
-          Tab(icon: Icon(Icons.list, color: Colors.white)),
-          Tab(icon: Icon(Icons.download_outlined, color: Colors.white)),
-        ]);
-  }
-
-  Widget getTabBarPages() {
-    return TabBarView(controller: tabController, children: <Widget>[
-      G(),
-      Gpas(),
-    ]);
-  }
-
-  Future<bool> _onWillPop() {
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text("Êtes-vous sûr de vouloir quitter l'application?"),
-        content: new Text("Voulez-vous quitter l'application?"),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('Non'), ),
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('Oui'),
-          ),
-        ],
-      ),
-    ) ?? false;
-  }
-
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-        onWillPop:_onWillPop,
-        child: new Scaffold(
-          appBar: new AppBar(
-            toolbarHeight: 60,
-            centerTitle: true,
-            title: new Container(
-              height: 50.0,
-              width: 70.0,
-            ),
-            backgroundColor: Color.fromRGBO(197, 19, 53, 1),
-            flexibleSpace: SafeArea(
-              child: getTabBar(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'FairyDev Store',
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      //appBar: MyAppBar(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            HeaderSection(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class HeaderSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(197, 19, 53, 1),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(50),
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            left: 20,
+            bottom: 60,
+            child: Text(
+              'Bienvenue dans FairyDev Store, \n\Vous trouverez ici toutes nos applications ainsi que \n\les nouvelles mises à jour à faire. \n\Clique sur la flèche pour découvrir notre Store !',
             ),
           ),
-          body: getTabBarPages(),
-        ));
+          Positioned(
+            right: 0,
+            bottom: 20,
+            child: MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Accueil(), // mettre la page main de second-test
+                  ),
+                );
+              },
+              color: Colors.blue,
+              shape: CircleBorder(),
+              child: Padding(
+                padding: EdgeInsets.all(17),
+                child: Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
