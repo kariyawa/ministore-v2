@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ministore/test.dart';
-
 import 'g.dart';
 import 'gpas.dart';
 
 class Accueil extends StatefulWidget {
   @override
-  _AccueilState createState() => new _AccueilState();
+  _CustomTabBarDemoState createState() => _CustomTabBarDemoState();
 }
 
-class _AccueilState extends State<Accueil> with SingleTickerProviderStateMixin {
-  TabController tabController;
-
+class _CustomTabBarDemoState extends State<Accueil> with SingleTickerProviderStateMixin {
+  TabController _tabController;
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
-
+    _tabController =
+        TabController(length:list.length, vsync: this);// initialise it here
   }
 
   @override
   void dispose() {
-    tabController.dispose();
+    _tabController.dispose();
     super.dispose();
+  }
+
+  List<Widget> list = [
+    Tab(icon: Icon(Icons.list, color: Colors.white)),
+    Tab(icon: Icon(Icons.download_outlined, color: Colors.white)),
+  ];
+
+  textStyle() {
+    return TextStyle(color: Colors.black, fontSize:20.0);
   }
 
   Widget getTabBar() {
     return TabBar(
-        controller: tabController,
+        controller: _tabController,
         indicatorSize: TabBarIndicatorSize.label,
         tabs: [
           Tab(icon: Icon(Icons.list, color: Colors.white)),
@@ -37,50 +43,29 @@ class _AccueilState extends State<Accueil> with SingleTickerProviderStateMixin {
   }
 
   Widget getTabBarPages() {
-    return TabBarView(controller: tabController, children: <Widget>[
+    return TabBarView(controller: _tabController, children: <Widget>[
       G(),
       Gpas(),
     ]);
   }
 
-  Future<bool> _onWillPop() {
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text("Êtes-vous sûr de vouloir quitter l'application?"),
-        content: new Text("Voulez-vous quitter l'application?"),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('Non'), ),
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('Oui'),
-          ),
-        ],
-      ),
-    ) ?? false;
-  }
-
-
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-        onWillPop:_onWillPop,
-        child: new Scaffold(
-          appBar: new AppBar(
-            toolbarHeight: 60,
-            centerTitle: true,
-            title: new Container(
-              height: 50.0,
-              width: 70.0,
-            ),
-            backgroundColor: Color.fromRGBO(197, 19, 53, 1),
-            flexibleSpace: SafeArea(
-              child: getTabBar(),
-            ),
-          ),
-          body: getTabBarPages(),
-        ));
+    return Scaffold(
+      appBar: AppBar(
+        bottom: TabBar(
+            controller: _tabController,
+            indicatorSize: TabBarIndicatorSize.label,
+            tabs: [
+              Tab(icon: Icon(Icons.list, color: Colors.white)),
+              Tab(icon: Icon(Icons.download_outlined, color: Colors.white)),
+            ]),
+        title: Image.asset('assets/images/unknown.png', width: MediaQuery.of(context).size.width,),
+        backgroundColor: Color.fromRGBO(197, 19, 53, 1),
+        toolbarHeight: 120,
+      ),
+        body: getTabBarPages()
+
+    );
   }
 }

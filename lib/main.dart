@@ -40,15 +40,22 @@ class HeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: Color.fromRGBO(197, 19, 53, 1),
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(50),
+          bottomLeft: Radius.circular(20),
         ),
       ),
       child: Stack(
         children: [
+          Positioned(
+            top: MediaQuery.of(context).size.width,
+            right: -10,
+            height: 85,
+            child: Image.asset('assets/images/unknown.png',fit: BoxFit.cover
+          ),
+          ),
           Positioned(
             left: 20,
             bottom: 60,
@@ -68,7 +75,7 @@ class HeaderSection extends StatelessWidget {
                   ),
                 );
               },
-              color: Colors.blue,
+              color: Colors.blue, //151CDC
               shape: CircleBorder(),
               child: Padding(
                 padding: EdgeInsets.all(17),

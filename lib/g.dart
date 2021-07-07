@@ -153,9 +153,9 @@ class _MyAppState extends State<MyAppE> {
   getPermissionString(index) {
     String monWidget;
     if (index == "green") {
-      monWidget = " (mise à jour disponible)";
+      monWidget = " (Mise à jour disponible)";
     }else if (index == "red"){
-      monWidget = "A jour";
+      monWidget = " (A jour)";
     }
     return monWidget;
   }
@@ -175,7 +175,10 @@ class _MyAppState extends State<MyAppE> {
 
 
     return Scaffold(
-      body: ListView.builder(
+      body: ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          color: Colors.black,
+        ),
         itemCount: installedAppsInFile == null ? 0 : installedAppsInFile.length,
         itemBuilder: (context, index) {
           return ListTile(
@@ -184,7 +187,7 @@ class _MyAppState extends State<MyAppE> {
               text: new TextSpan(style: new TextStyle(color: Colors.black,),
                 children: <TextSpan>[
                   new TextSpan(text: installedAppsInFile[index]["version_name"]),
-                  new TextSpan(text: getPermissionString(installedAppsInFile[index]["check"]), style: new TextStyle(color: Colors.red)),
+                  new TextSpan(text: getPermissionString(installedAppsInFile[index]["check"]), style: new TextStyle(color: getPermission(installedAppsInFile[index]["check"]) ? Colors.red : Colors.lightGreen)),
                 ],
               ),),
             trailing: IconButton(

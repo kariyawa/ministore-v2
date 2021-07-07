@@ -93,7 +93,10 @@ class _MyAppState extends State<MyAppE> {
 
 
     return Scaffold(
-      body: ListView.builder(
+      body:ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          color: Colors.black,
+        ),
         itemCount: notInstalledAppsInFile == null ? 0 : notInstalledAppsInFile.length,
         itemBuilder: (context, index) {
           return ListTile(
